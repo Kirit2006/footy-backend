@@ -41,8 +41,8 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 app.get('/api/news', async (req, res) => {
     try {
         // NewsAPI allows server-to-server requests completely free
-        const newsResponse = await fetch(`https://newsapi.org/v2/everything?q=football&language=en&sortBy=publishedAt&apiKey=${process.env.NEWS_API_KEY}`);
         
+        const newsResponse = await fetch(`https://newsapi.org/v2/everything?q="Champions League" OR "La Liga"&language=en&sortBy=publishedAt&apiKey=${process.env.NEWS_API_KEY}`);
         if (!newsResponse.ok) {
             throw new Error(`NewsAPI responded with status ${newsResponse.status}`);
         }

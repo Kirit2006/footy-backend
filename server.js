@@ -35,3 +35,22 @@ app.post('/api/scout', async (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+// Add this new endpoint for football news proxying
+app.get('/api/news', async (req, res) => {
+    try {
+        // NewsAPI allows server-to-server requests completely free
+        const newsResponse = await fetch(`https://newsapi.org/v2/everything?q=football&language=en&sortBy=publishedAt&apiKey=${process.env.NEWS_API_KEY}`);
+        
+        if (!newsResponse.ok) {
+            throw new Error(`NewsAPI responded with status ${newsResponse.status}`);
+        }
+
+        const data = await newsResponse.json();
+        res.json(data);
+    } catch (error) {
+        console.error("News Proxy Error:", error.message);
+        res.status(500).json({ error: "Failed to fetch football news via proxy server" });
+    }
+});

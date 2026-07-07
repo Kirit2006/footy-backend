@@ -17,7 +17,11 @@ app.post('/api/scout', async (req, res) => {
       body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
     });
 
-    if (!googleResponse.ok) throw new Error("Google API failed");
+    if (!googleResponse.ok) {
+  const errorText = await googleResponse.text();
+  console.error("Google API Error Details:", errorText); // This prints the true error
+  throw new Error("Google API failed");
+}
 
     const data = await googleResponse.json();
     const aiText = data.candidates[0].content.parts[0].text;
